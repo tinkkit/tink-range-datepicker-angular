@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="tink.skeleton">
+<html ng-app="tink.rangedatepicker">
 <head>
   <meta charset="utf-8">
   <title>Tink module</title>
@@ -7,15 +7,92 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="viewport" content="initial-scale=1.0,user-scalable=no,minimum-scale=1.0">
   <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/tink-core/assets/tink/tink.css" />
   <!-- endbower -->
 </head>
 <body>
 
-<tink-skeleton data-text="Skeleton is working fine!"></tink-skeleton>
+<div class="container">
+  <h1>Datepicker Component</h1>
+  <hr>
+  <section class="panel">
+    <header class="panel-heading">
+      <i class="fa fa-th-large"></i>
+      <h1 class="panel-title">Range datepicker</h1>
+    </header>
+    <div class="panel-body">
+      <h3>Examples</h3>
+
+        <div class="row">
+        <p class="col-xs-12">
+          <tink-datepicker-range data-first-date="firstSelectedDate" data-last-date="lastSelectedDate"></tink-datepicker-range>
+        </p>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <h3>Usage</h3>
+          <p>
+            Add element <code>&lt;tink-datepicker-range&gt;&lt;/tink-datepicker-range&gt;</code> to your html page.<br/>
+            Do not forget to add the attributes <code>first-date</code> and <code>last-date</code> otherwise it wil not work !
+          </p>
+          <p>
+            To retrieve the first selected date, attach a scope variable, for example <code>firstSelectedDate</code>, from your controller to the attribute <code>first-date</code>. This is the same for the second date.
+          </p>
+        </div>
+        <div class="col-xs-12">
+          <h3>Options</h3>
+          <div class="table-responsive">
+            <table class="table-dev">
+              <thead>
+                <tr>
+                  <th>Attr</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>data-max-date</td>
+                  <td><code>date</code></td>
+                  <td><code>null</code></td>
+                  <td>when a date cannot be larger then the given max date.</td>
+                </tr>
+                <tr>
+                  <td>data-min-date</td>
+                  <td><code>date</code></td>
+                  <td><code>null</code></td>
+                  <td>when a date cannot be minor then the given min date.</td>
+                </tr>
+                <tr>
+                  <td>data-ng-model</td>
+                  <td><code>date</code></td>
+                  <td><code>null</code></td>
+                  <td>The date value.</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
 
 <!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.js"></script>
+<script src="bower_components/angular/angular.js"></script>
+<script src="bower_components/angular-resource/angular-resource.js"></script>
+<script src="bower_components/angular-cookies/angular-cookies.js"></script>
+<script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+<script src="bower_components/angular-animate/angular-animate.js"></script>
+<script src="bower_components/angular-touch/angular-touch.js"></script>
+<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/tink-helper-date-angular/dist/tink-helper-date-angular.js"></script>
+<script src="bower_components/tink-helper-format-angular/dist/tink-helper-format-angular.js"></script>
+<script src="bower_components/tink-helper-safe-apply-angular/dist/tink-helper-safe-apply-angular.js"></script>
 <!-- endbower -->
 
-<script src="scripts/directives/skeleton.js"></script>
+<script src="scripts/directives/tink-range-datepicker-angular.js"></script>
 </body>
 </html>

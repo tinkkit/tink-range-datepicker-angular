@@ -50,7 +50,7 @@ module.exports = function(config) {
     // - PhantomJS
     // - IE (only Windows)
     browsers: [
-      'PhantomJS'
+      'Chrome'
     ],
     preprocessors:{
       'src/templates/{,*/}*.html': 'html2js'

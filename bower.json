@@ -1,8 +1,8 @@
 {
-  "name": "tink-skeleton-angular",
+  "name": "tink-range-datepicker-angular",
   "version": "1.0.0",
   "main": [
-    "dist/tink-skeleton-angular.js"
+    "dist/tink-range-datepicker-angular.js"
   ],
   "ignore": [
     ".*",
@@ -22,7 +22,10 @@
     "angular-touch": "~1.3.12",
     "angular-route": "~1.3.12",
     "jquery": "~2.1.3",
-    "tink-core": "latest"
+    "tink-core": "latest",
+    "tink-helper-date-angular": "latest",
+    "tink-helper-format-angular":"latest",
+    "tink-helper-safe-apply-angular": "latest"
   },
   "devDependencies": {
     "angular-mocks": "~1.3.12",
