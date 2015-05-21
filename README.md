@@ -1,12 +1,12 @@
 # Tink range datepicker Angular directive
 
-v1.0.0
+v1.1.0
 
 ## What is this repository for?
 
 The Tink Angular range-datepicker gives you the ability to select a series of dates.
 
-Tink is an in-house developed easy-to-use front end framework for quick prototyping and simple deployment of all kinds of websites and apps, keeping a uniform and consistent look and feel.
+Tink is an in-house developed easy-to-use front-end framework for quick prototyping and simple deployment of all kinds of websites and apps, keeping a uniform and consistent look and feel.
 
 ## Setup
 
@@ -18,11 +18,41 @@ Tink is an in-house developed easy-to-use front end framework for quick prototyp
 ### Install
 
 1. Go to the root of your project and type the following command in your terminal:
+
    `bower install tink-range-datepicker-angular --save`
 
-2. Include `dist/tink-range-datepicker-angular.js` and its necessary dependencies in your project.
+2. Add the following files to your project:
 
-3. On http://tink.digipolis.be you will find all necessary documentation.
+  `<link rel="stylesheet" href="bower_components/tink-core/dist/tink.css" />` (or one of the Tink themes)
+
+  `<script src="bower_components/tink-accordion-angular/dist/tink-range-datepicker-angular.js"></script>`
+
+
+----------
+
+
+## How to use
+
+### tink-datepicker-range
+
+### Component
+
+To use this directive you have to add the element `<tink-datepicker-range></tink-datepicker-range>` to your html page.
+Do not forget to add the attributes `first-date` and `last-date` otherwise it wil not work !
+
+To retrieve the first selected date, attach a scope variable, for example `firstSelectedDate`, from your controller to the attribute `first-date. This is the same for the second date.
+
+```html
+<tink-datepicker-range data-first-date="firstSelectedDate" data-last-date="lastSelectedDate"></tink-datepicker-range>
+```
+
+### Options
+
+Attr | Type | Default | Details
+--- | --- | --- | ---
+data-max-date | `date` | `null` | When a date cannot be larger then the given max date.
+data-min-date | `date` | `null` | When a date cannot be minor then the given min date.
+data-ng-model | `date` | `null` | The date value.
 
 ## Contribution guidelines
 
