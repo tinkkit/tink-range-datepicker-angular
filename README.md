@@ -25,7 +25,7 @@ Tink is an in-house developed easy-to-use front-end framework for quick prototyp
 
   `<link rel="stylesheet" href="bower_components/tink-core/dist/tink.css" />` (or one of the Tink themes)
 
-  `<script src="bower_components/tink-accordion-angular/dist/tink-range-datepicker-angular.js"></script>`
+  `<script src="bower_components/tink-range-datepicker-angular/dist/tink-range-datepicker-angular.js"></script>`
 
 
 ----------
