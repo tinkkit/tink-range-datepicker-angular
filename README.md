@@ -50,6 +50,8 @@ To retrieve the first selected date, attach a scope variable, for example `first
 
 Attr | Type | Default | Details
 --- | --- | --- | ---
+data-first-date (required) | `object` | `''` | This variable holds a date object with the first selected date.
+data-last-date (required) | `object` | `''` | This variable holds a date object with the second selected date.
 data-max-date | `date` | `null` | When a date cannot be larger then the given max date.
 data-min-date | `date` | `null` | When a date cannot be minor then the given min date.
 data-ng-model | `date` | `null` | The date value.
