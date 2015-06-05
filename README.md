@@ -1,6 +1,6 @@
 # Tink range datepicker Angular directive
 
-v1.1.0
+v1.0.1
 
 ## What is this repository for?
 

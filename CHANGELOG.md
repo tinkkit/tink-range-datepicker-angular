@@ -14,6 +14,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 -->
 
+## [1.0.1] - 2015-06-05
+
+### Changed
+- Updated reference to the external style sheet
+
 
 
 ## [1.0.0] - 2015-04-23
