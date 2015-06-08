@@ -1,7 +1,7 @@
 {
   "name": "tink-range-datepicker-angular",
   "description": "Tink range datepicker Angular directive",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "repository": {
     "type": "git",
     "url": "git@github.com:tinkkit/tink-range-datepicker-angular.git"
