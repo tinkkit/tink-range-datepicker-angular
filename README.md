@@ -23,13 +23,13 @@ Tink is an in-house developed easy-to-use front-end framework for quick prototyp
 
 2. Add the following files to your project:
 
-  `<link rel="stylesheet" href="bower_components/tink-core/dist/tink.css" />` (or one of the Tink themes)
+   `<link rel="stylesheet" href="bower_components/tink-core/dist/tink.css" />` (or one of the Tink themes)
 
-  `<script src="bower_components/tink-range-datepicker-angular/dist/tink-range-datepicker-angular.js"></script>`
+   `<script src="bower_components/tink-range-datepicker-angular/dist/tink-range-datepicker-angular.js"></script>`
 
 3. Add `tink.rangedatepicker` to your app module's dependency.
 
-  `angular.module('myApp', ['tink.rangedatepicker']);`
+   `angular.module('myApp', ['tink.rangedatepicker']);`
 
 
 ----------
