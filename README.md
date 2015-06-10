@@ -1,6 +1,6 @@
 # Tink range datepicker Angular directive
 
-v1.0.2
+v1.0.3
 
 ## What is this repository for?
 
@@ -27,19 +27,25 @@ Tink is an in-house developed easy-to-use front-end framework for quick prototyp
 
    `<script src="bower_components/tink-range-datepicker-angular/dist/tink-range-datepicker-angular.js"></script>`
 
+   `<script src="bower_components/tink-helper-date-angular/dist/tink-helper-date-angular.js"></script>`
+
+   `<script src="bower_components/tink-helper-format-angular/dist/tink-helper-format-angular.js"></script>`
+
+   `<script src="bower_components/tink-helper-safe-apply-angular/dist/tink-helper-safe-apply-angular.js"></script>`
+
 3. Add `tink.rangedatepicker` to your app module's dependency.
 
    `angular.module('myApp', ['tink.rangedatepicker']);`
 
 
+
 ----------
+
 
 
 ## How to use
 
 ### tink-datepicker-range
-
-### Component
 
 To use this directive you have to add the element `<tink-datepicker-range></tink-datepicker-range>` to your html page.
 Do not forget to add the attributes `first-date` and `last-date` otherwise it wil not work !
@@ -59,6 +65,10 @@ data-last-date (required) | `[object]` | `[]` | This variable holds a date objec
 data-max-date | `date` | `null` | When a date cannot be larger then the given max date.
 data-min-date | `date` | `null` | When a date cannot be minor then the given min date.
 data-ng-model | `date` | `null` | The date value.
+
+### Example
+
+A working example can be found in [the Tink documentation](http://tink.digipolis.be/#/docs/directives/range-datepicker#example).
 
 ## Contribution guidelines
 
