@@ -1,7 +1,7 @@
 'use strict';
 
 describe('datepicker range', function() {
-	beforeEach(module('tink.range-datepicker'));
+	beforeEach(module('tink.rangedatepicker'));
 	beforeEach(module('templates'));
 
 	var bodyEl = $('body'), sandboxEl,today,scope,$compile,$templateCache,dateCalculator;
