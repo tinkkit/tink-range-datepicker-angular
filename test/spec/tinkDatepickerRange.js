@@ -14,6 +14,11 @@ describe('datepicker range', function() {
 		today = new Date();
 		bodyEl.html('');
 		sandboxEl = $('<div>').attr('id', 'sandbox').appendTo(bodyEl);
+
+		var template = $templateCache.get('src/templates/tinkDatePickerRange.html');
+    $templateCache.put('templates/tinkDatePickerRange.html',template);
+    template = $templateCache.get('src/templates/tinkDatePickerRangeInputs.html');
+    $templateCache.put('templates/tinkDatePickerRangeInputs.html',template);
 	}));
 
 	afterEach(function() {
