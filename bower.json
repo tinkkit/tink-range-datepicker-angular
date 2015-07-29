@@ -1,6 +1,6 @@
 {
   "name": "tink-range-datepicker-angular",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "main": [
     "dist/tink-range-datepicker-angular.js"
   ],
