@@ -25,6 +25,7 @@
           lastDate: '=?',
           minDate:'=?',
           maxDate:'=?',
+          isDisabled:'=?'
         },
         compile: function(template,$attr){
           if($attr.required === '' || $attr.required === 'required'){
@@ -56,33 +57,36 @@
           }
 
           $directive.calendar.first.on('click',function(){
-            if(isTouch){
-              element.find('input[type=date]:first').click();
-            }else{
-              if($directive.open){
-                if($directive.focusedModel ==='firstDateElem'){
-                  hide();
+            if(!isDisabled()){
+              if(isTouch){
+                element.find('input[type=date]:first').click();
+              }else{
+                if($directive.open){
+                  if($directive.focusedModel ==='firstDateElem'){
+                    hide();
+                  }else{
+                    $directive.focused.firstDateElem.focus();
+                  }
                 }else{
                   $directive.focused.firstDateElem.focus();
                 }
-              }else{
-                $directive.focused.firstDateElem.focus();
               }
             }
           });
           $directive.calendar.last.on('click',function(){
-
-            if(isTouch){
-              element.find('input[type=date]:last').click();
-            }else{
-              if($directive.open){
-                 if($directive.focusedModel ==='lastDateElem'){
-                  hide();
+            if(!isDisabled()){
+              if(isTouch){
+                element.find('input[type=date]:last').click();
+              }else{
+                if($directive.open){
+                   if($directive.focusedModel ==='lastDateElem'){
+                    hide();
+                  }else{
+                    $directive.focused.lastDateElem.focus();
+                  }
                 }else{
                   $directive.focused.lastDateElem.focus();
                 }
-              }else{
-                $directive.focused.lastDateElem.focus();
               }
             }
           });
@@ -177,6 +181,8 @@
                angular.element($directive.tbody.lastDateElem).replaceWith($compile( htmlLast)( scope ));
 
              }
+            
+           
 
             function checkBefore(date,before){
               if(!angular.isDate(date)){
@@ -388,25 +394,31 @@
                 }
             }
 
+            function isDisabled(){
+              return ($($directive.focused.firstDateElem).scope().isDisabled && $($directive.focused.lastDateElem).scope().isDisabled) || scope.isDisabled;
+            }
+
             function $onMouseDown (evt) {
-              if (evt.target.isContentEditable) {
-                evt.target.focus();
-                if(isTouch){
+              if(!isDisabled()){
+                if (evt.target.isContentEditable) {
+                  evt.target.focus();
+                  if(isTouch){
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                  }
+                }else{
                   evt.preventDefault();
                   evt.stopPropagation();
                 }
-              }else{
-                evt.preventDefault();
-                evt.stopPropagation();
-              }
 
-              if(isTouch){
-                var targetEl = angular.element(evt.target);
+                if(isTouch){
+                  var targetEl = angular.element(evt.target);
 
-                if (targetEl[0].nodeName.toLowerCase() !== 'button') {
-                  targetEl = targetEl.parent();
+                  if (targetEl[0].nodeName.toLowerCase() !== 'button') {
+                    targetEl = targetEl.parent();
+                  }
+                  targetEl.triggerHandler('click');
                 }
-                targetEl.triggerHandler('click');
               }
             }
 
@@ -449,14 +461,19 @@
 
               angular.element($directive.focused.firstDateElem).bind('focus', function () {
                 safeApply(scope,function(){
-                  $directive.focusedModel = 'firstDateElem';
-                  show();
+                  if(!isDisabled()){
+                    $directive.focusedModel = 'firstDateElem';
+                    show();
+                  };
                 });
               });
+
               angular.element($directive.focused.lastDateElem).bind('focus', function () {
                 safeApply(scope,function(){
-                  $directive.focusedModel = 'lastDateElem';
-                  show();
+                  if(!isDisabled()){
+                    $directive.focusedModel = 'lastDateElem';
+                    show();
+                  };
                 });
               });
             }
@@ -484,10 +501,6 @@
                 // -- no inputfield focused ! so take the date of today --/
                 setViewDate(new Date());
               }
-
-
-
-
               $directive.open = true;
               templateElem.css({display: 'block'});
             }
@@ -510,8 +523,8 @@
 
 
   $templateCache.put('templates/tinkDatePickerRangeInputs.html',
-    "<div class=\"datepicker-input-fields row no-gutter\"> <div class=col-sm-6> <input id=firstDateElem tabindex=-1 class=elem-one data-date data-format=00/00/0000 data-placeholder=dd/mm/jjjj tink-format-input ng-model=firstDate valid-name=first>\n" +
-    "<span class=datepicker-icon> <i class=\"fa fa-calendar\"></i> </span> </div> <div class=col-sm-6> <input id=lastDateElem tabindex=-1 class=elem-two data-date data-format=00/00/0000 data-placeholder=dd/mm/jjjj tink-format-input ctrl-model=dynamicName valid-name=last ng-model=lastDate>\n" +
+    "<div class=\"datepicker-input-fields row no-gutter\"> <div class=col-sm-6> <input id=firstDateElem class=elem-one data-date data-format=00/00/0000 data-placeholder=dd/mm/jjjj tink-format-input ng-model=firstDate valid-name=first>\n" +
+    "<span class=datepicker-icon> <i class=\"fa fa-calendar\"></i> </span> </div> <div class=col-sm-6> <input id=lastDateElem class=elem-two data-date data-format=00/00/0000 data-placeholder=dd/mm/jjjj tink-format-input ctrl-model=dynamicName valid-name=last ng-model=lastDate>\n" +
     "<span class=datepicker-icon> <i class=\"fa fa-calendar\"></i> </span> </div> </div>"
   );
 

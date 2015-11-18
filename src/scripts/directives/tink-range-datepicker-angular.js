@@ -395,7 +395,7 @@
             }
 
             function isDisabled(){
-              return $($directive.focused.firstDateElem).scope().isDisabled && $($directive.focused.lastDateElem).scope().isDisabled;
+              return ($($directive.focused.firstDateElem).scope().isDisabled && $($directive.focused.lastDateElem).scope().isDisabled) || scope.isDisabled;
             }
 
             function $onMouseDown (evt) {

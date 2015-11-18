@@ -1,14 +1,15 @@
 {
   "name": "tink-range-datepicker-angular",
   "description": "Tink range datepicker Angular directive",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "repository": {
     "type": "git",
     "url": "git@github.com:tinkkit/tink-range-datepicker-angular.git"
   },
   "dependencies": {
     "bower": "^1.3.12",
-    "grunt-cli": "^0.1.13"
+    "grunt-cli": "^0.1.13",
+    "grunt-sass": "^1.1.0"
   },
   "devDependencies": {
     "grunt": "^0.4.1",
