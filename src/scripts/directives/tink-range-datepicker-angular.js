@@ -8,7 +8,7 @@
   module.directive('tinkDatepickerRange',['$q', '$templateCache', '$http', 'calView', '$sce','$compile','dateCalculator','$window','safeApply', function ($q, $templateCache, $http, calView, $sce,$compile,dateCalculator,$window,safeApply) {
       return {
         restrict: 'E',
-        replace: true,
+        replace: false,
         priority:0,
         require:['?^form'],
         templateUrl: 'templates/tinkDatePickerRangeInputs.html',
@@ -50,11 +50,14 @@
             valid:{firstDateElem:false,lastDateElem:false},
             mouse: 0,
             viewDate:new Date(),
-            hardCodeFocus: false
+            hardCodeFocus: false,
+            values:{fist:null,last:null}
           };
           if(attrs.name && form[0]){
             scope.ctrlconst = form[0][attrs.name];
           }
+
+          $directive.focused.firstDateElem
 
           $directive.calendar.first.on('click',function(){
             if(!isDisabled()){
@@ -159,7 +162,7 @@
                $directive.tbody.lastDateElem = element.find('tbody')[1];
 
               // -- Create the first calendar --/
-              var htmlFirst = calView.createMonthDays($directive.viewDate, scope.firstDate, scope.lastDate,'prevMonth',scope.minDate,scope.maxDate);
+              var htmlFirst = calView.createMonthDays($directive.viewDate, $directive.selectedDates.first, $directive.selectedDates.last,'prevMonth',scope.minDate,scope.maxDate);
                // -- Replace and COMPILE the nieuw calendar view  --/
                angular.element($directive.tbody.firstDateElem).replaceWith($compile( htmlFirst)( scope ));
 
@@ -176,7 +179,7 @@
 
 
               // -- create the second view   --/
-              var htmlLast = calView.createMonthDays(copyViewDate, scope.firstDate, scope.lastDate,'nextMonth',scope.minDate,scope.maxDate);
+              var htmlLast = calView.createMonthDays(copyViewDate, $directive.selectedDates.first, $directive.selectedDates.last,'nextMonth',scope.minDate,scope.maxDate);
                // -- compile and replace the second view   --/
                angular.element($directive.tbody.lastDateElem).replaceWith($compile( htmlLast)( scope ));
 
@@ -353,9 +356,88 @@
               }
               checkValidity();
             };
+
+            function validFormat(date, format) {
+                var dateObject;
+                //Check if the date is not null and defined
+                if (angular.isDefined(date) && date !== null) {
+                  //check if de date is in a string form;
+                  if (typeof date === 'string') {
+                    //check if the length of the string has de proper length.
+                    if (date.length !== 10) { return false; }
+                    //if we are on touch we do not have to check
+                    if (!isTouch && !/^(?:(?:31(\/)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/.test(date)) { return false; }
+                    //get a date object
+                    dateObject = dateCalculator.getDate(date, format);
+                  } else if (angular.isDate(date)) {
+                    //if we already got a date object use that one
+                    dateObject = date;
+                  } else if (typeof date === 'function') {
+                    //if it is a function call the function and recheck the data;
+                    return validFormat(date(), format);
+                  } else {
+                    //in all other cases false !
+                    return false;
+                  }
+                  //check if we got a valid date.
+                  return dateObject.toString() !== 'Invalid Date';
+                }
+              }
+
             var noErrorClass = 'hide-error';
             var firstEl = $(element.find('.faux-input')[0]);
             var lastEl = $(element.find('.faux-input')[1]);
+
+            var prevFirst;
+            $directive.focused.firstDateElem.bind('valueChanged', function (e, val) {
+              //We put this in a safeaply because we are out of the angular scope !
+              safeApply(scope, function () {
+
+                if (validFormat(val, 'dd/mm/yyyy')) {
+                  //Convert the String Date to a Date object and put it as the selected date.
+                  $directive.selectedDates.first = dateCalculator.getDate(val, 'dd/mm/yyyy');
+                  //ctrl[0].$setViewValue($directive.selectedDate);
+                  //addTime($directive.selectedDate,scope.ngModel);
+                  //change the view date to the date we have selected.
+                  setViewDate($directive.selectedDates.first);
+                  //Build the datepicker again because we have changed the variables.
+                  buildView();
+
+                }
+
+                //Check if the date we received is a valid date.
+                if(firstEl && prevFirst !== val){
+                  firstEl.controller('ngModel').$setDirty();
+                }
+                $directive.values.first = val;
+                prevFirst = val;
+              });
+            });
+
+            var prevLast;
+            $directive.focused.lastDateElem.bind('valueChanged', function (e, val) {
+              //We put this in a safeaply because we are out of the angular scope !
+              safeApply(scope, function () {
+
+                if (validFormat(val, 'dd/mm/yyyy')) {
+                  //Convert the String Date to a Date object and put it as the selected date.
+                  $directive.selectedDates.last = dateCalculator.getDate(val, 'dd/mm/yyyy');
+                  //ctrl[0].$setViewValue($directive.selectedDate);
+                  //addTime($directive.selectedDate,scope.ngModel);
+                  //change the view date to the date we have selected.
+                  setViewDate($directive.selectedDates.last);
+                  //Build the datepicker again because we have changed the variables.
+                  buildView();
+
+                }
+                //Check if the date we received is a valid date.
+                if(lastEl && prevLast !== val){
+                  lastEl.controller('ngModel').$setDirty();
+                }
+                $directive.values.last = val;
+                prevLast = val;
+              });
+            });
 
             function checkValidity(){
                 //scope.ctrlconst.$setValidity('required',true);
@@ -395,7 +477,7 @@
             }
 
             function isDisabled(){
-              return ($($directive.focused.firstDateElem).scope().isDisabled && $($directive.focused.lastDateElem).scope().isDisabled) || scope.isDisabled;
+              return scope.isDisabled;
             }
 
             function $onMouseDown (evt) {
@@ -438,6 +520,16 @@
                 $directive.focusedModel = null;
                 safeApply(scope,function(){
                  // checkValidity();
+                 var firstDate = $directive.values.first;
+                 if(firstDate !== null && firstDate !== undefined){
+                  scope.firstDate = dateCalculator.getDate($directive.values.first, 'dd/mm/yyyy');
+                 }
+
+                 var lastDate = $directive.values.last;
+                 if(lastDate !== null && lastDate !== undefined){
+                  scope.lastDate = dateCalculator.getDate($directive.values.last, 'dd/mm/yyyy');
+                 }
+                 
                 });
 
               //}
@@ -455,6 +547,12 @@
               if(!isTouch){
                 element.bind('touchstart mousedown',$onMouseDown);
               }
+
+              element.bind('focus',function(){
+                setTimeout(function(){
+                  $($directive.focused.firstDateElem).focus();
+                },5);
+              })
 
               angular.element($directive.focused.firstDateElem).bind('blur', hide);
               angular.element($directive.focused.lastDateElem).bind('blur', hide);
