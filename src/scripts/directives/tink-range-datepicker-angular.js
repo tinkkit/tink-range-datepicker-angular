@@ -588,6 +588,8 @@
                  if(firstDate !== null && firstDate !== undefined){
                   scope.firstDate = dateCalculator.getDate(firstDate, $directive.dateFormat);
                  }
+                 first.$ngBlur = true;
+                 last.$ngBlur = true;
 
                  var lastDate = $(lastEl).scope().ctrl.getValue();
                  if(lastDate !== null && lastDate !== undefined){

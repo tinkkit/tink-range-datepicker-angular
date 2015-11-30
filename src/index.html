@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<div ng-controller="ctrl as ctr" class="container">
+<div ng-controller="ctrl as load" class="container">
   <h1>Datepicker Component</h1>
   <hr>
   <section class="panel">
@@ -22,14 +22,36 @@
     </header>
     <div class="panel-body">
       <h3>Examples</h3>
-      <form name="form">
-        <div class="row">
-        {{ctr.firstSelectedDate}}-{{ctr.lastSelectedDate}}
-        <p class="col-xs-12">
-          <tink-datepicker-range name="dates" data-first-date="ctr.firstSelectedDate" data-last-date="ctr.lastSelectedDate"></tink-datepicker-range>
-        </p>
-      </div>
-      </form>
+      <form name="load.dateForm" novalidate>{{load.dateForm.firstdates}}
+            <div class="row form-group" data-ng-class="{'has-error':(load.dateForm.firstdates.$ngBlur|| load.dateForm.submitted) && load.dateForm.firstdates.$invalid,'has-success': (load.dateForm.firstdates.$ngBlur || load.dateForm.submitted) && load.dateForm.firstdates.$valid}">
+              <div class="col-xs-12">
+                <label for="tink-username-example">Date</label>
+              </div>
+              <div class="col-xs-12 col-sm-6 col-md-4">
+                <div class="validation">
+                   <tink-datepicker-range name="dates" data-first-date="load.firstSelectedDate" data-last-date="load.lastSelectedDate"></tink-datepicker-range>
+                </div>
+                <span class="help-block">Kies een datum die na {{minDateStr}} en voor {{maxDateStr}} ligt.</span>
+              </div>
+              {{load.dateForm.$dirty}}{{load.dateForm.lastdates.$dirty}}{{load.dateForm.firstdates.$dirty}}
+              <div class="col-xs-12 col-sm-6 col-md-8">
+                <div class="messages" ng-messages="load.dateForm.firstdates.$error" ng-if="load.dateForm.firstdates.$ngBlur" >
+                  <div class="text-danger" ng-message="date-required">Geef een geldige datum in.</div>
+                  <div class="text-danger" ng-message="date">Geef een geldige datum formaat in.</div>
+                  <div class="text-danger" ng-message="date-max">De datum die je koos ligt te ver in de toekomst. Kies een datum die voor {{maxDateStr}} ligt.</div>
+                  <div class="text-danger" ng-message="date-min">De datum die je koos ligt te ver in het verleden. Kies een datum die na {{minDateStr}} ligt.</div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col-xs-12">
+                <button data-ng-click="signup()" type="button" class="btn-primary">Valideren</button>
+                    <button ng-click="nullf()">test</button>
+
+              </div>
+            </div>
+{{load.dateForm.lastdates}}
+          </form>
       <div class="row">
         <div class="col-xs-12">
           <h3>Usage</h3>
