@@ -117,11 +117,14 @@
              scope.dayLabels = $sce.trustAsHtml('<th>' + dayLabels.join('</th><th>') + '</th>');
             // Add a watch to know when input changes from the outside //
 
-            scope.$watch('firstDate', function () {
-              if(scope.firstDate !== null){
+            /*scope.$watch('firstDate', function (value) {
+              if(value !== null){
                 $directive.focusedModel = 'firstDateElem';
+                scope.$setTheDate(value,null,true);
+                scope.$select(value);
                //scope.$select(scope.firstDate,null,true);
-               buildView();
+               //setFirstDate(scope.firstDate);
+               //buildView();
              }else{
                 checkValidity();
              }
@@ -129,15 +132,18 @@
 
             });
             // Add a watch to know when input changes from the outside //
-            scope.$watch('lastDate', function () {
-            if(scope.lastDate !== null){
+            scope.$watch('lastDate', function (value) {
+            if(value !== null){
               $directive.focusedModel = 'lastDateElem';
+              scope.$setTheDate(value,null,true);
+             //scope.$select(value);
               //scope.$select(scope.lastDate,null,true);
-              buildView();
+              //setLastDate(scope.lastDate);
+              //buildView();
             }else{
               checkValidity();
             }
-          });
+          });*/
 
               // -- the config is for the devolopers to change ! for in the future  --/
               // -- the $directive is four the directive hehehe ;) to keep track of stuff --/
@@ -345,7 +351,7 @@
               }
               
             }
-            scope.$setTheDate = function (el,format,hardcoded) {
+            scope.$setTheDate = function (el,format,hardcoded,focus) {
               if(!angular.isDefined(format)){
                   format = 'yyyy/mm/dd';
               }
@@ -366,7 +372,8 @@
                   }else{
                     if(dateCalculator.dateBeforeOther($directive.selectedDates.first,$directive.selectedDates.last)){
                       $directive.selectedDates.last = null;
-                      setLastDate(null);
+                      //setLastDate(null);
+                      scope.lastDate = null;
                       if(!hardcoded){
                         setTimeout(function(){ $directive.focused.lastDateElem.focus(); }, 1);
                       }
@@ -382,7 +389,8 @@
                   }else{
                     if(!dateCalculator.dateBeforeOther($directive.selectedDates.last,$directive.selectedDates.first)){
                      $directive.selectedDates.first = null;
-                     setFirstDate(null);
+                     //setFirstDate(null);
+                      scope.firstDate = null;
                       if(!hardcoded){
                         setTimeout(function(){ $directive.focused.firstDateElem.focus(); }, 1);
                       }
@@ -433,7 +441,8 @@
 
                 if (validFormat(val, config.dateFormat)) {
                   //Convert the String Date to a Date object and put it as the selected date.
-                  scope.$setTheDate(dateCalculator.getDate(val, config.dateFormat));
+                  $directive.focusedModel = 'firstDateElem';
+                  scope.$setTheDate(dateCalculator.getDate(val, config.dateFormat),null,true);
                   //ctrl[0].$setViewValue($directive.selectedDate);
                   //addTime($directive.selectedDate,scope.ngModel);
                   //change the view date to the date we have selected.
@@ -467,7 +476,8 @@
 
                 if (validFormat(val, config.dateFormat)) {
                   //Convert the String Date to a Date object and put it as the selected date.
-                  scope.$setTheDate(dateCalculator.getDate(val, config.dateFormat));
+                  $directive.focusedModel = 'lastDateElem';
+                  scope.$setTheDate(dateCalculator.getDate(val, config.dateFormat),null,true);
                   //ctrl[0].$setViewValue($directive.selectedDate);
                   //addTime($directive.selectedDate,scope.ngModel);
                   //change the view date to the date we have selected.

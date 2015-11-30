@@ -12,7 +12,7 @@
 </head>
 <body>
 
-<div class="container">
+<div ng-controller="ctrl as ctr" class="container">
   <h1>Datepicker Component</h1>
   <hr>
   <section class="panel">
@@ -24,9 +24,9 @@
       <h3>Examples</h3>
       <form name="form">
         <div class="row">
-        {{form.$error}}
+        {{ctr.firstSelectedDate}}-{{ctr.lastSelectedDate}}
         <p class="col-xs-12">
-          <tink-datepicker-range name="dates" data-first-date="firstSelectedDate" data-last-date="lastSelectedDate"></tink-datepicker-range>
+          <tink-datepicker-range name="dates" data-first-date="ctr.firstSelectedDate" data-last-date="ctr.lastSelectedDate"></tink-datepicker-range>
         </p>
       </div>
       </form>
@@ -78,7 +78,7 @@
         </div>
       </div>
     </div>
-  </section>
+  </section><button ng-click="ctr.setDate()">setdate</button>
 </div>
 
 <!-- bower:js -->
@@ -94,6 +94,17 @@
 <script src="bower_components/tink-helper-safe-apply-angular/dist/tink-helper-safe-apply-angular.js"></script>
 <script src="bower_components/tink-helper-format-angular/dist/tink-helper-format-angular.js"></script>
 <!-- endbower -->
+
+<script>
+angular.module('tink.rangedatepicker',['tink.datehelper','tink.safeApply','tink.formathelper']).controller('ctrl',function(){
+  this.firstSelectedDate = new Date();
+ this.setDate = function(){
+  this.firstSelectedDate = new Date();
+  this.lastSelectedDate = new Date(2015,9,30);
+ }
+
+})
+</script>
 
 <script src="scripts/directives/tink-range-datepicker-angular.js"></script>
 </body>
