@@ -22,12 +22,14 @@
     </header>
     <div class="panel-body">
       <h3>Examples</h3>
-
+      <form name="form">
         <div class="row">
+        {{form.$error}}
         <p class="col-xs-12">
-          <tink-datepicker-range data-first-date="firstSelectedDate" data-last-date="lastSelectedDate"></tink-datepicker-range>
+          <tink-datepicker-range name="dates" data-first-date="firstSelectedDate" data-last-date="lastSelectedDate"></tink-datepicker-range>
         </p>
       </div>
+      </form>
       <div class="row">
         <div class="col-xs-12">
           <h3>Usage</h3>

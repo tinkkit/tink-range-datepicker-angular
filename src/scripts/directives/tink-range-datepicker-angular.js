@@ -51,13 +51,14 @@
             mouse: 0,
             viewDate:new Date(),
             hardCodeFocus: false,
+            dateFormat:'dd/mm/yyyy',
             values:{fist:null,last:null}
           };
           if(attrs.name && form[0]){
             scope.ctrlconst = form[0][attrs.name];
           }
 
-          $directive.focused.firstDateElem
+          
 
           $directive.calendar.first.on('click',function(){
             if(!isDisabled()){
@@ -104,6 +105,12 @@
              var isNative = /(ip(a|o)d|iphone|android)/ig.test($window.navigator.userAgent);
              var isTouch = ('createTouch' in $window.document) && isNative && isDateSupported();
 
+             if(isTouch){
+              $directive.focused.firstDateElem = element.find('input:first');
+              $directive.focused.lastDateElem = element.find('input:last');
+              $directive.dateFormat = 'yyyy-mm-dd';
+             }
+
             // labels for the days you can make this variable //
             var dayLabels = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'];
              // -- create the labels  --/
@@ -113,7 +120,7 @@
             scope.$watch('firstDate', function () {
               if(scope.firstDate !== null){
                 $directive.focusedModel = 'firstDateElem';
-               scope.$select(scope.firstDate,null,true);
+               //scope.$select(scope.firstDate,null,true);
                buildView();
              }else{
                 checkValidity();
@@ -125,7 +132,7 @@
             scope.$watch('lastDate', function () {
             if(scope.lastDate !== null){
               $directive.focusedModel = 'lastDateElem';
-              scope.$select(scope.lastDate,null,true);
+              //scope.$select(scope.lastDate,null,true);
               buildView();
             }else{
               checkValidity();
@@ -220,6 +227,7 @@
             }
               var first =  element.find('#input:first').controller('ngModel');
               var last = element.find('#input:last').controller('ngModel');
+
             // -- to change the month of the calender --/
             function nextMonth() {
               // -- add one month to the viewDate --/
@@ -308,7 +316,36 @@
               bindEvents();
             }
 
-            scope.$select = function (el,format,hardcoded) {
+            function setFirstDate(date){console.log(date)
+              if($(firstEl).scope() && $(firstEl).scope().ctrl){
+                $(firstEl).scope().ctrl.setValue(dateCalculator.format(date, config.dateFormat));
+              }
+            }
+
+            function setLastDate(date){console.log(date)
+              if($(lastEl).scope() && $(lastEl).scope().ctrl){
+                $(lastEl).scope().ctrl.setValue(dateCalculator.format(date, config.dateFormat));
+              }
+            }
+
+            scope.$select = function(el,format,hardcoded){
+              if(!angular.isDefined(format)){
+                  format = 'yyyy/mm/dd';
+              }
+              var date;
+              if(angular.isDate(el)){
+                date = el;
+              }else{
+                date = dateCalculator.getDate(el,format);
+              }
+              if ($directive.focusedModel === 'firstDateElem') { 
+                setFirstDate(date)
+              }else{
+                setLastDate(date)
+              }
+              
+            }
+            scope.$setTheDate = function (el,format,hardcoded) {
               if(!angular.isDefined(format)){
                   format = 'yyyy/mm/dd';
               }
@@ -320,16 +357,16 @@
               }
 
               if ($directive.focusedModel !== null) {
-                if ($directive.focusedModel === 'firstDateElem') {
-                  scope.firstDate = date;
-                  //first.$setViewValue(new Date())
-                  if(!angular.isDate(scope.lastDate)){
+                if ($directive.focusedModel === 'firstDateElem') {                  
+                  $directive.selectedDates.first = date;
+                  if(!angular.isDate($directive.selectedDates.last)){
                     if(!hardcoded){
                       setTimeout(function(){ $directive.focused.lastDateElem.focus(); }, 1);
                     }
                   }else{
-                    if(dateCalculator.dateBeforeOther(scope.firstDate,scope.lastDate)){
-                      scope.lastDate = null;
+                    if(dateCalculator.dateBeforeOther($directive.selectedDates.first,$directive.selectedDates.last)){
+                      $directive.selectedDates.last = null;
+                      setLastDate(null);
                       if(!hardcoded){
                         setTimeout(function(){ $directive.focused.lastDateElem.focus(); }, 1);
                       }
@@ -337,14 +374,15 @@
                   }
 
                 } else if ($directive.focusedModel === 'lastDateElem') {
-                  scope.lastDate = date;
-                  if(!angular.isDate(scope.firstDate)){
+                  $directive.selectedDates.last = date;
+                  if(!angular.isDate($directive.selectedDates.first)){
                     if(!hardcoded){
                       setTimeout(function(){ $directive.focused.firstDateElem.focus(); }, 1);
                     }
                   }else{
-                    if(!dateCalculator.dateBeforeOther(scope.lastDate,scope.firstDate)){
-                     scope.firstDate = null;
+                    if(!dateCalculator.dateBeforeOther($directive.selectedDates.last,$directive.selectedDates.first)){
+                     $directive.selectedDates.first = null;
+                     setFirstDate(null);
                       if(!hardcoded){
                         setTimeout(function(){ $directive.focused.firstDateElem.focus(); }, 1);
                       }
@@ -380,7 +418,7 @@
                     return false;
                   }
                   //check if we got a valid date.
-                  return dateObject.toString() !== 'Invalid Date';
+                  return dateObject && dateObject.toString() !== 'Invalid Date';
                 }
               }
 
@@ -393,9 +431,9 @@
               //We put this in a safeaply because we are out of the angular scope !
               safeApply(scope, function () {
 
-                if (validFormat(val, 'dd/mm/yyyy')) {
+                if (validFormat(val, config.dateFormat)) {
                   //Convert the String Date to a Date object and put it as the selected date.
-                  $directive.selectedDates.first = dateCalculator.getDate(val, 'dd/mm/yyyy');
+                  scope.$setTheDate(dateCalculator.getDate(val, config.dateFormat));
                   //ctrl[0].$setViewValue($directive.selectedDate);
                   //addTime($directive.selectedDate,scope.ngModel);
                   //change the view date to the date we have selected.
@@ -403,6 +441,14 @@
                   //Build the datepicker again because we have changed the variables.
                   buildView();
 
+                }else{
+                  $directive.selectedDates.first = null;
+                  if($directive.selectedDates.last){
+                    setViewDate($directive.selectedDates.last);
+                  }else{
+                    setViewDate(new Date())
+                  }
+                  buildView();
                 }
 
                 //Check if the date we received is a valid date.
@@ -419,9 +465,9 @@
               //We put this in a safeaply because we are out of the angular scope !
               safeApply(scope, function () {
 
-                if (validFormat(val, 'dd/mm/yyyy')) {
+                if (validFormat(val, config.dateFormat)) {
                   //Convert the String Date to a Date object and put it as the selected date.
-                  $directive.selectedDates.last = dateCalculator.getDate(val, 'dd/mm/yyyy');
+                  scope.$setTheDate(dateCalculator.getDate(val, config.dateFormat));
                   //ctrl[0].$setViewValue($directive.selectedDate);
                   //addTime($directive.selectedDate,scope.ngModel);
                   //change the view date to the date we have selected.
@@ -429,6 +475,14 @@
                   //Build the datepicker again because we have changed the variables.
                   buildView();
 
+                }else{
+                  $directive.selectedDates.last = null;
+                  if($directive.selectedDates.first){
+                    setViewDate($directive.selectedDates.first);
+                  }else{
+                    setViewDate(new Date())
+                  }
+                  buildView();
                 }
                 //Check if the date we received is a valid date.
                 if(lastEl && prevLast !== val){
@@ -520,14 +574,14 @@
                 $directive.focusedModel = null;
                 safeApply(scope,function(){
                  // checkValidity();
-                 var firstDate = $directive.values.first;
+                 var firstDate = $(firstEl).scope().ctrl.getValue();
                  if(firstDate !== null && firstDate !== undefined){
-                  scope.firstDate = dateCalculator.getDate($directive.values.first, 'dd/mm/yyyy');
+                  scope.firstDate = dateCalculator.getDate(firstDate, $directive.dateFormat);
                  }
 
-                 var lastDate = $directive.values.last;
+                 var lastDate = $(lastEl).scope().ctrl.getValue();
                  if(lastDate !== null && lastDate !== undefined){
-                  scope.lastDate = dateCalculator.getDate($directive.values.last, 'dd/mm/yyyy');
+                  scope.lastDate = dateCalculator.getDate(lastDate, $directive.dateFormat);
                  }
                  
                 });
@@ -578,7 +632,7 @@
 
 
             function show() {
-              if (!$directive.open) {
+              if (!isTouch && !$directive.open) {
               // -- check if there is an input field focused --/
               if ($directive.focusedModel !== null) {
 
